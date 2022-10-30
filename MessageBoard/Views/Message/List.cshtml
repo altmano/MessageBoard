@@ -1,0 +1,75 @@
+﻿@using Microsoft.AspNetCore.Identity
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model MessageBoard.ViewModels.MessageViewModel
+
+@inject UserManager<IdentityUser> UserManager
+
+<h1>@Model.topic.topicName</h1>
+
+<h3>@Model.topic.topicDescription</h3>
+
+<div class="container"> 
+    <h3>List of replies:</h3>
+
+
+@if(@Model.ListOfMessages != null)
+{
+    <table class="table-bordered">
+
+            @foreach(var message in @Model.ListOfMessages)
+         
+            {
+                <thead>
+                    <tr>
+                        <th>Author</th>
+                        <th>Text</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>  @message.AuthorName   </td>
+                        <td><p>@message.Text</p></td>
+                    </tr>
+                    @if(UserManager.GetUserName(User) == @message.AuthorName)
+                    {
+                    <tr>
+                        <td><a class="btn btn-danger" asp-controller="Message" asp-action="ConfirmDelete" asp-route-messageId="@message.Id"> Delete</a></td>
+                        <td><a class="btn btn-link" asp-controller="Message" asp-action="Edit" asp-route-messageId="@message.Id"> Edit</a></td>
+                    </tr>
+                    }
+
+
+                </tbody>
+               
+
+                 
+            }
+    </table>
+
+
+}
+else
+{
+    <p>There are no messages yet</p>
+}
+</div>
+
+
+<form asp-controller="Message" asp-action="Reply" asp-route-topicId=@Model.topic.Id method="post" role="form">
+    <div class="form-group">
+        <label asp-for="Message.Text" class="col-md-2 control-label" ></label>
+        <div class="col-md-5">
+            <input asp-for="Message.Text" class="form-control" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-5">
+            <input type="submit" class="btn btn-primary" value="Reply" />
+        </div>
+    </div>
+</form>

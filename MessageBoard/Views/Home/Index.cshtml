@@ -1,0 +1,14 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@model  MessageBoard.ViewModels.HomeViewModel
+
+<div class="text-center">
+    <h1 class="display-4">Welcome to the Message Board</h1>
+
+    @foreach (var category in Model.Categories)
+    {
+        <li><a asp-controller="Topic" asp-action="List" asp-route-categoryId=@category.Id> @category.Name</a> </li> 
+    }
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
